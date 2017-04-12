@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 import pandas as pd
 from bokeh.charts import Histogram
 from bokeh.embed import components
-import time
 
 app = Flask(__name__)
 
@@ -31,25 +30,13 @@ def index():
 	if current_feature_name == None:
 		current_feature_name = "Sepal Length"
 
-	# Determine the number of bins
-	bins = request.args.get("bins")
-	if bins == "" or bins == None:
-		bins = 10
-	else:
-		bins = int(bins)
-
-	# Create the plot, and time it
-	t0 = time.time()
-	plot = create_figure(current_feature_name, bins)
-	t1 = time.time()
-	time_to_plot = t1-t0
-	time_to_plot = "%.4f seconds" % time_to_plot	
+	# Create the plot
+	plot = create_figure(current_feature_name, 10)
 		
 	# Embed plot into HTML via Flask Render
 	script, div = components(plot)
-	return render_template("iris_index.html", script=script, div=div,
-		bins = bins, time_to_plot = time_to_plot, feature_names=feature_names, 
-		current_feature_name=current_feature_name)
+	return render_template("iris_index1.html", script=script, div=div,
+		feature_names=feature_names,  current_feature_name=current_feature_name)
 
 # With debug=True, Flask server will auto-reload 
 # when there are code changes
